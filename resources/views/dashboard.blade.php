@@ -26,7 +26,7 @@
                                     <div class="col-7 col-stats">
                                         <div class="numbers">
                                             <p class="card-category">Draft</p>
-                                            <h4 class="card-title"></h4>
+                                            <h4 class="card-title">{{ $totalDrafts }}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -46,7 +46,7 @@
                                     <div class="col-7 col-stats">
                                         <div class="numbers">
                                             <p class="card-category">Proses</p>
-                                            <h4 class="card-title"></h4>
+                                            <h4 class="card-title">{{ $totalProcesses }}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -66,7 +66,7 @@
                                     <div class="col-7 col-stats">
                                         <div class="numbers">
                                             <p class="card-category">Revisi</p>
-                                            <h4 class="card-title"></h4>
+                                            <h4 class="card-title">{{ $totalRevisions }}</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -86,7 +86,7 @@
                                     <div class="col-7 col-stats">
                                         <div class="numbers">
                                             <p class="card-category">Selesai</p>
-                                            <h4 class="card-title"></h4>
+                                            <h4 class="card-title">{{ $totalCompleted }}</h4>
                                         </div>
                                     </div>
                                 </div>
