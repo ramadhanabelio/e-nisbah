@@ -1,0 +1,167 @@
+<div class="card border border-light shadow-sm mb-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h6 class="mb-0 text-primary fw-bold">Nisbah</h6>
+    </div>
+    <div class="card-body p-4">
+        <div class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label font-weight-bold">Nomor Surat <span class="text-danger">*</span></label>
+                <input type="text" name="nomor_surat" class="form-control"
+                    value="{{ old('nomor_surat', $surat->nomor_surat ?? '') }}" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label font-weight-bold">Cabang <span class="text-danger">*</span></label>
+                <input type="text" name="cabang" class="form-control"
+                    value="{{ old('cabang', $surat->cabang ?? '') }}" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label font-weight-bold">Nama Nasabah <span class="text-danger">*</span></label>
+                <input type="text" name="nama_nasabah" class="form-control"
+                    value="{{ old('nama_nasabah', $surat->nama_nasabah ?? '') }}" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label font-weight-bold">Jenis Nasabah <span class="text-danger">*</span></label>
+                <input type="text" name="jenis_nasabah" class="form-control"
+                    value="{{ old('jenis_nasabah', $surat->jenis_nasabah ?? '') }}" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label font-weight-bold">Total Nominal (Rp) <span class="text-danger">*</span></label>
+                <input type="number" name="total_nominal" class="form-control"
+                    value="{{ old('total_nominal', $surat->total_nominal ?? '') }}" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label font-weight-bold">Total Relation Outstanding <span
+                        class="text-danger">*</span></label>
+                <input type="number" name="total_relation_outstanding" class="form-control"
+                    value="{{ old('total_relation_outstanding', $surat->total_relation_outstanding ?? '') }}" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label font-weight-bold">Tanggal Surat <span class="text-danger">*</span></label>
+                <input type="date" name="tanggal" class="form-control"
+                    value="{{ old('tanggal', $surat->tanggal ?? date('Y-m-d')) }}" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label font-weight-bold">Alasan Pengajuan <span class="text-danger">*</span></label>
+                <textarea name="alasan" class="form-control" rows="3" required>{{ old('alasan', $surat->alasan ?? '') }}</textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border border-light shadow-sm mb-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+        <h6 class="mb-0 text-primary fw-bold">Rekening Deposito</h6>
+        <button type="button" class="btn btn-sm btn-primary btn-round" onclick="addRow()">
+            <i class="fa fa-plus me-1"></i> Tambah Baris
+        </button>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="itemsTable" style="min-width: 1300px;">
+                <thead class="table-light text-secondary">
+                    <tr>
+                        <th style="width: 14%">No Rekening <span class="text-danger">*</span></th>
+                        <th style="width: 12%">Nominal <span class="text-danger">*</span></th>
+                        <th style="width: 10%">Jk. Waktu <span class="text-danger">*</span></th>
+                        <th style="width: 11%">Tgl Penempatan <span class="text-danger">*</span></th>
+                        <th style="width: 11%">Tgl Perpanjangan</th>
+                        <th style="width: 11%">Tgl Jatuh Tempo <span class="text-danger">*</span></th>
+                        <th style="width: 10%">Spesial Nisbah <span class="text-danger">*</span></th>
+                        <th style="width: 10%">Expected Return <span class="text-danger">*</span></th>
+                        <th style="width: 11%">Jenis Transaksi <span class="text-danger">*</span></th>
+                        <th style="width: 5%" class="text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $items = old('items', isset($surat) ? $surat->depositoItems->toArray() : [[]]);
+                    @endphp
+
+                    @foreach ($items as $index => $item)
+                        <tr>
+                            <td>
+                                <input type="text" name="items[{{ $index }}][nomor_rekening_deposito]"
+                                    class="form-control form-control-sm"
+                                    value="{{ $item['nomor_rekening_deposito'] ?? '' }}" required>
+                            </td>
+                            <td>
+                                <input type="number" name="items[{{ $index }}][nominal]"
+                                    class="form-control form-control-sm" min="0"
+                                    value="{{ $item['nominal'] ?? '' }}" required>
+                            </td>
+                            <td>
+                                <input type="text" name="items[{{ $index }}][jangka_waktu]"
+                                    class="form-control form-control-sm" placeholder="Contoh: 3 Bulan"
+                                    value="{{ $item['jangka_waktu'] ?? '' }}" required>
+                            </td>
+                            <td>
+                                <input type="date" name="items[{{ $index }}][tanggal_penempatan_baru]"
+                                    class="form-control form-control-sm"
+                                    value="{{ $item['tanggal_penempatan_baru'] ?? '' }}" required>
+                            </td>
+                            <td>
+                                <input type="date" name="items[{{ $index }}][tanggal_perpanjangan]"
+                                    class="form-control form-control-sm"
+                                    value="{{ $item['tanggal_perpanjangan'] ?? '' }}">
+                            </td>
+                            <td>
+                                <input type="date" name="items[{{ $index }}][tanggal_jatuh_tempo]"
+                                    class="form-control form-control-sm"
+                                    value="{{ $item['tanggal_jatuh_tempo'] ?? '' }}" required>
+                            </td>
+                            <td>
+                                <input type="text" name="items[{{ $index }}][spesial_nisbah]"
+                                    class="form-control form-control-sm" value="{{ $item['spesial_nisbah'] ?? '' }}"
+                                    required>
+                            </td>
+                            <td>
+                                <input type="text" name="items[{{ $index }}][expected_return]"
+                                    class="form-control form-control-sm" value="{{ $item['expected_return'] ?? '' }}"
+                                    required>
+                            </td>
+                            <td>
+                                <input type="text" name="items[{{ $index }}][jenis_transaksi]"
+                                    class="form-control form-control-sm" placeholder="Baru / Perpanjangan"
+                                    value="{{ $item['jenis_transaksi'] ?? '' }}" required>
+                            </td>
+                            <td class="text-center">
+                                @if ($loop->first)
+                                    <button type="button" class="btn btn-link text-muted p-0 disabled"><i
+                                            class="fas fa-trash"></i></button>
+                                @else
+                                    <button type="button" class="btn btn-link text-danger p-0"
+                                        onclick="removeRow(this)"><i class="fas fa-trash"></i></button>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    let i = {{ count($items) }};
+
+    function addRow() {
+        let html = `<tr>
+            <td><input type="text" name="items[${i}][nomor_rekening_deposito]" class="form-control form-control-sm" required></td>
+            <td><input type="number" name="items[${i}][nominal]" class="form-control form-control-sm" min="0" required></td>
+            <td><input type="text" name="items[${i}][jangka_waktu]" class="form-control form-control-sm" required></td>
+            <td><input type="date" name="items[${i}][tanggal_penempatan_baru]" class="form-control form-control-sm" required></td>
+            <td><input type="date" name="items[${i}][tanggal_perpanjangan]" class="form-control form-control-sm"></td>
+            <td><input type="date" name="items[${i}][tanggal_jatuh_tempo]" class="form-control form-control-sm" required></td>
+            <td><input type="text" name="items[${i}][spesial_nisbah]" class="form-control form-control-sm" required></td>
+            <td><input type="text" name="items[${i}][expected_return]" class="form-control form-control-sm" required></td>
+            <td><input type="text" name="items[${i}][jenis_transaksi]" class="form-control form-control-sm" required></td>
+            <td class="text-center"><button type="button" class="btn btn-link text-danger p-0" onclick="removeRow(this)"><i class="fas fa-trash"></i></button></td>
+        </tr>`;
+        document.querySelector('#itemsTable tbody').insertAdjacentHTML('beforeend', html);
+        i++;
+    }
+
+    function removeRow(btn) {
+        btn.closest('tr').remove();
+    }
+</script>

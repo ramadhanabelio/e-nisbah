@@ -15,18 +15,18 @@ return new class extends Migration
             $table->id();
             $table->string('nomor_surat')->unique();
             $table->date('tanggal');
-            $table->string('perihal');
+            $table->string('cabang');
+
+            $table->string('nama_nasabah');
+            $table->string('jenis_nasabah');
+
+            $table->decimal('total_nominal', 20, 2);
+            $table->decimal('total_relation_outstanding', 20, 2);
+            $table->text('alasan');
+
             $table->text('keterangan')->nullable();
-            $table->decimal('nominal', 20, 2);
-            $table->string('file_surat');
-            $table->foreignId('created_by')
-                ->constrained('users');
-            $table->enum('status', [
-                'draft',
-                'proses',
-                'revisi',
-                'selesai'
-            ])->default('draft');
+            $table->foreignId('created_by')->constrained('users');
+            $table->enum('status', ['draft', 'proses', 'revisi', 'selesai'])->default('draft');
             $table->timestamps();
         });
     }

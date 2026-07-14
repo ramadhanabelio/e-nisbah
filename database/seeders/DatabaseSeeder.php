@@ -19,39 +19,39 @@ class DatabaseSeeder extends Seeder
         $users = [
             [
                 'role' => 'cs',
-                'name' => 'Nama CS',
+                'name' => 'Sri Mulyani Adha',
             ],
             [
                 'role' => 'pinsi_pelnas',
-                'name' => 'Nama PINSI PELNAS',
+                'name' => 'Herda Alhusna',
             ],
             [
                 'role' => 'pinbag_operasional',
-                'name' => 'Nama PINBAG Operasional',
+                'name' => 'Rahma Yeni',
             ],
             [
                 'role' => 'pincab',
-                'name' => 'Nama PINCAB',
+                'name' => 'Hadi Kesuma',
             ],
             [
                 'role' => 'admin_pusat',
-                'name' => 'Nama Admin Kantor Pusat',
+                'name' => 'Nurhidayah',
             ],
             [
                 'role' => 'pinbag',
-                'name' => 'Nama PINBAG',
+                'name' => 'Melani Usman',
             ],
             [
                 'role' => 'pinidiv',
-                'name' => 'Nama PINIDIV',
+                'name' => 'Famela',
             ],
             [
                 'role' => 'direksi',
-                'name' => 'Nama Direksi',
+                'name' => 'Okta',
             ],
             [
                 'role' => 'dirut',
-                'name' => 'Nama DIRUT',
+                'name' => 'Vianda',
             ],
         ];
 

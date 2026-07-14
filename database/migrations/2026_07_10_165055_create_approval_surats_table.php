@@ -25,6 +25,8 @@ return new class extends Migration
                 'rejected'
             ]);
             $table->text('catatan')->nullable();
+            $table->string('qr_code_path')->nullable();
+            $table->string('posisi_ttd')->nullable();
             $table->timestamp('approved_at')->nullable();
             $table->timestamps();
         });
