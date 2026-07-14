@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\ApprovalSurat;
-use App\Models\RevisiSurat;
 use App\Models\Surat;
-use App\Models\WorkflowSurat;
+use App\Models\RevisiSurat;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Auth;
+use App\Models\ApprovalSurat;
+use App\Models\WorkflowSurat;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
 class SuratMasukController extends Controller implements HasMiddleware
 {
@@ -48,13 +48,18 @@ class SuratMasukController extends Controller implements HasMiddleware
         return view('surat-masuk.index', compact('antreanSurat'));
     }
 
-    public function show(Surat $surat)
+    public function show($id)
     {
-        $userRole = Auth::user()->role;
-        $workflow = WorkflowSurat::where('surat_id', $surat->id)->first();
+        $surat = Surat::with(['workflow', 'depositoItems'])->findOrFail($id);
 
-        if ($workflow->current_role !== $userRole || $surat->status !== 'proses') {
-            return redirect()->route('persetujuan.index')->with('error', 'Dokumen tidak tersedia atau sudah diproses.');
+        $userRole = Auth::user()->role;
+
+        if (!$surat->workflow) {
+            return redirect()->route('surat-masuk.index')->with('error', 'Alur kerja surat tidak ditemukan.');
+        }
+
+        if ($surat->workflow->current_role !== $userRole || $surat->status !== 'proses') {
+            return redirect()->route('surat-masuk.index')->with('error', 'Dokumen tidak tersedia atau sudah diproses.');
         }
 
         return view('surat-masuk.show', compact('surat'));
@@ -164,26 +169,23 @@ class SuratMasukController extends Controller implements HasMiddleware
                 return 'pinbag';
 
             case 'pinbag':
-                return ($nominal >= 10000000000) ? 'pinidiv' : 'admin_pusat_final';
+                return ($nominal >= 10000000000) ? 'pinidiv' : 'admin_pusat';
 
             case 'pinidiv':
-                return ($nominal >= 50000000000) ? 'direksi' : 'admin_pusat_final';
+                return ($nominal >= 50000000000) ? 'direksi' : 'admin_pusat';
 
             case 'direksi':
-                return ($nominal >= 250000000000) ? 'dirut' : 'admin_pusat_final';
+                return ($nominal >= 250000000000) ? 'dirut' : 'admin_pusat';
 
             case 'dirut':
-                return 'admin_pusat_final';
-
-            case 'admin_pusat_final':
                 return 'selesai';
 
             default:
-                return 'admin_pusat_final';
+                return 'admin_pusat';
         }
     }
 
-    public function approveAdmin(Request $request, Surat $surat)
+    public function direct(Request $request, Surat $surat)
     {
         $user = Auth::user();
         $workflow = WorkflowSurat::where('surat_id', $surat->id)->first();

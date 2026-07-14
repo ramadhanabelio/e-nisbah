@@ -7,42 +7,43 @@
             <div class="col-md-4">
                 <label class="form-label font-weight-bold">Nomor Surat <span class="text-danger">*</span></label>
                 <input type="text" name="nomor_surat" class="form-control"
-                    value="{{ old('nomor_surat', $surat->nomor_surat ?? '') }}" required>
+                    value="{{ old('nomor_surat', $surat_keluar->nomor_surat ?? '') }}" required>
             </div>
             <div class="col-md-4">
                 <label class="form-label font-weight-bold">Cabang <span class="text-danger">*</span></label>
                 <input type="text" name="cabang" class="form-control"
-                    value="{{ old('cabang', $surat->cabang ?? '') }}" required>
+                    value="{{ old('cabang', $surat_keluar->cabang ?? '') }}" required>
             </div>
             <div class="col-md-4">
                 <label class="form-label font-weight-bold">Nama Nasabah <span class="text-danger">*</span></label>
                 <input type="text" name="nama_nasabah" class="form-control"
-                    value="{{ old('nama_nasabah', $surat->nama_nasabah ?? '') }}" required>
+                    value="{{ old('nama_nasabah', $surat_keluar->nama_nasabah ?? '') }}" required>
             </div>
             <div class="col-md-4">
                 <label class="form-label font-weight-bold">Jenis Nasabah <span class="text-danger">*</span></label>
                 <input type="text" name="jenis_nasabah" class="form-control"
-                    value="{{ old('jenis_nasabah', $surat->jenis_nasabah ?? '') }}" required>
+                    value="{{ old('jenis_nasabah', $surat_keluar->jenis_nasabah ?? '') }}" required>
             </div>
             <div class="col-md-4">
                 <label class="form-label font-weight-bold">Total Nominal (Rp) <span class="text-danger">*</span></label>
                 <input type="number" name="total_nominal" class="form-control"
-                    value="{{ old('total_nominal', $surat->total_nominal ?? '') }}" required>
+                    value="{{ old('total_nominal', $surat_keluar->total_nominal ?? '') }}" required>
             </div>
             <div class="col-md-4">
                 <label class="form-label font-weight-bold">Total Relation Outstanding <span
                         class="text-danger">*</span></label>
                 <input type="number" name="total_relation_outstanding" class="form-control"
-                    value="{{ old('total_relation_outstanding', $surat->total_relation_outstanding ?? '') }}" required>
+                    value="{{ old('total_relation_outstanding', $surat_keluar->total_relation_outstanding ?? '') }}"
+                    required>
             </div>
             <div class="col-md-4">
                 <label class="form-label font-weight-bold">Tanggal Surat <span class="text-danger">*</span></label>
                 <input type="date" name="tanggal" class="form-control"
-                    value="{{ old('tanggal', $surat->tanggal ?? date('Y-m-d')) }}" required>
+                    value="{{ old('tanggal', $surat_keluar->tanggal ?? date('Y-m-d')) }}" required>
             </div>
             <div class="col-12">
                 <label class="form-label font-weight-bold">Alasan Pengajuan <span class="text-danger">*</span></label>
-                <textarea name="alasan" class="form-control" rows="3" required>{{ old('alasan', $surat->alasan ?? '') }}</textarea>
+                <textarea name="alasan" class="form-control" rows="3" required>{{ old('alasan', $surat_keluar->alasan ?? '') }}</textarea>
             </div>
         </div>
     </div>
@@ -74,7 +75,7 @@
                 </thead>
                 <tbody>
                     @php
-                        $items = old('items', isset($surat) ? $surat->depositoItems->toArray() : [[]]);
+                        $items = old('items', isset($surat_keluar) ? $surat_keluar->depositoItems->toArray() : [[]]);
                     @endphp
 
                     @foreach ($items as $index => $item)

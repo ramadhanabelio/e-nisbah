@@ -58,12 +58,14 @@
                     </li>
                 @endif
 
-                <li class="nav-item">
-                    <a href="">
-                        <i class="fas fa-archive"></i>
-                        <p>Arsip Surat</p>
-                    </a>
-                </li>
+                @if (collect(['cs', 'admin_pusat'])->contains(auth()->user()->role))
+                    <li class="nav-item {{ request()->is('arsip-surat*') ? 'active' : '' }}">
+                        <a href="{{ route('arsip.index') }}">
+                            <i class="fas fa-archive"></i>
+                            <p>Arsip Surat</p>
+                        </a>
+                    </li>
+                @endif
 
                 {{-- <li class="nav-section">
                     <span class="sidebar-mini-icon">

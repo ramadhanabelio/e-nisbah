@@ -16,7 +16,7 @@
                     <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('persetujuan.index') }}">Antrean Persetujuan</a>
+                    <a href="{{ route('surat-masuk.index') }}">Antrean Persetujuan</a>
                 </li>
                 <li class="separator">
                     <i class="icon-arrow-right"></i>
@@ -26,7 +26,7 @@
                 </li>
             </ul>
             <div class="ms-md-auto py-2 py-md-0">
-                <a href="{{ route('persetujuan.index') }}" class="btn btn-outline-secondary btn-round btn-sm">
+                <a href="{{ route('surat-masuk.index') }}" class="btn btn-outline-danger btn-round btn-sm">
                     <i class="fas fa-arrow-left me-1"></i> Kembali
                 </a>
             </div>
@@ -102,7 +102,7 @@
 
                     <div class="d-grid gap-2">
                         @if (Auth::user()->role === 'admin_pusat')
-                            <form action="{{ route('persetujuan.approveAdmin', $surat->id) }}" method="POST">
+                            <form action="{{ route('surat-masuk.approveAdmin', $surat->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-success w-100 fw-bold shadow-sm"
                                     onclick="return confirm('Apakah Anda yakin ingin meneruskan dokumen kelolaan ini?')">
@@ -110,7 +110,7 @@
                                 </button>
                             </form>
                         @else
-                            <form action="{{ route('persetujuan.approve', $surat->id) }}" method="POST">
+                            <form action="{{ route('surat-masuk.approve', $surat->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-success w-100 fw-bold shadow-sm"
                                     onclick="return confirm('Apakah Anda yakin isi dokumen sudah BENAR dan siap memberikan Tanda Tangani Elektronik?')">
@@ -612,7 +612,7 @@
 
     <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <form action="{{ route('persetujuan.reject', $surat->id) }}" method="POST">
+            <form action="{{ route('surat-masuk.reject', $surat->id) }}" method="POST">
                 @csrf
                 <div class="modal-content text-dark">
                     <div class="modal-header bg-danger text-white py-3">

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\DepositoItem;
 use App\Models\User;
+use App\Models\WorkflowSurat;
 use Illuminate\Database\Eloquent\Model;
 
 class Surat extends Model
@@ -20,7 +21,6 @@ class Surat extends Model
         'total_relation_outstanding',
         'alasan',
 
-        'keterangan',
         'created_by',
         'status',
     ];
@@ -33,5 +33,10 @@ class Surat extends Model
     public function depositoItems()
     {
         return $this->hasMany(DepositoItem::class);
+    }
+
+    public function workflow()
+    {
+        return $this->hasOne(WorkflowSurat::class);
     }
 }

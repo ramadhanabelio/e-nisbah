@@ -7,17 +7,9 @@
         <div class="page-header">
             <h3 class="fw-bold">Surat Masuk</h3>
             <ul class="breadcrumbs">
-                <li class="nav-home">
-                    <a href="{{ route('dashboard') }}">
-                        <i class="icon-home"></i>
-                    </a>
-                </li>
-                <li class="separator">
-                    <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                    <a href="#">Surat Masuk</a>
-                </li>
+                <li class="nav-home"><a href="{{ route('dashboard') }}"><i class="icon-home"></i></a></li>
+                <li class="separator"><i class="icon-arrow-right"></i></li>
+                <li class="nav-item"><a href="#">Surat Masuk</a></li>
             </ul>
         </div>
 
@@ -40,35 +32,35 @@
                             <table id="basic-datatables" class="display table table-striped table-hover align-middle">
                                 <thead class="table-light text-secondary">
                                     <tr>
-                                        <th>No Surat</th>
-                                        <th>Tanggal</th>
+                                        <th style="width: 5%">No.</th>
+                                        <th>Nomor Surat</th>
+                                        <th>Nama Nasabah</th>
+                                        <th>Tanggal Kirim</th>
                                         <th>Cabang Pengaju (CS)</th>
-                                        <th>Perihal</th>
                                         <th>Nominal</th>
-                                        <th class="text-center">Aksi</th>
+                                        <th class="text-center" style="width: 15%">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($antreanSurat as $workflow)
                                         <tr>
-                                            <td class="fw-bold">{{ $workflow->surat->nomor_surat }}</td>
+                                            <td class="text-center">{{ $loop->iteration }}.</td>
+                                            <td>{{ $workflow->surat->nomor_surat }}</td>
+                                            <td>{{ $workflow->surat->nama_nasabah ?? 'Nasabah Tidak Diketahui' }}</td>
                                             <td>{{ \Carbon\Carbon::parse($workflow->surat->tanggal)->format('d M Y') }}</td>
                                             <td>{{ $workflow->surat->creator->name ?? 'User Tidak Diketahui' }}</td>
-                                            <td>{{ Str::limit($workflow->surat->perihal, 30) }}</td>
-                                            <td class="text-success fw-bold">Rp.
-                                                {{ number_format($workflow->surat->nominal, 0, ',', '.') }}</td>
+                                            <td>Rp. {{ number_format($workflow->surat->total_nominal, 0, ',', '.') }}</td>
                                             <td class="text-center">
-                                                <a href="{{ route('persetujuan-.show', $workflow->surat->id) }}"
-                                                    class="btn btn-sm btn-primary shadow-sm">
-                                                    <i class="fas fa-search me-1"></i> Cek Surat
+                                                <a href="{{ route('surat-masuk.show', $workflow->surat->id) }}"
+                                                    class="btn btn-sm btn-info btn-round"> Cek Surat
                                                 </a>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="6" class="text-center text-muted py-5">
-                                                <i class="fas fa-inbox fa-3x mb-3 text-light"></i><br>
-                                                Tidak ada surat yang menunggu persetujuan Anda saat ini.
+                                            <td colspan="7" class="text-center text-muted py-5">
+                                                <i class="fas fa-folder-open fa-3x mb-3 text-light"></i>
+                                                <br>Tidak ada data tersedia.
                                             </td>
                                         </tr>
                                     @endforelse
@@ -77,9 +69,7 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
     </div>
 @endsection

@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Form Pengajuan E-Nisbah')
+@section('title', 'Form Surat Keluar')
 
 @section('content')
     <div class="page-inner">
         <div class="page-header">
-            <h3 class="fw-bold">Form Pengajuan E-Nisbah</h3>
+            <h3 class="fw-bold">Form Surat Keluar</h3>
             <ul class="breadcrumbs">
                 <li class="nav-home"><a href="{{ route('dashboard') }}"><i class="icon-home"></i></a></li>
                 <li class="separator"><i class="icon-arrow-right"></i></li>
-                <li class="nav-item"><a href="{{ route('surat-keluar.index') }}">Daftar Pengajuan E-Nisbah</a></li>
+                <li class="nav-item"><a href="{{ route('surat-keluar.index') }}">Daftar Surat Keluar</a></li>
                 <li class="separator"><i class="icon-arrow-right"></i></li>
-                <li class="nav-item"><a href="#">Form Pengajuan E-Nisbah</a></li>
+                <li class="nav-item"><a href="#">Form Surat Keluar</a></li>
             </ul>
         </div>
 
