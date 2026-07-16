@@ -10,9 +10,41 @@
                     value="{{ old('nomor_surat', $surat_keluar->nomor_surat ?? '') }}" required>
             </div>
             <div class="col-md-4">
-                <label class="form-label font-weight-bold">Cabang <span class="text-danger">*</span></label>
-                <input type="text" name="cabang" class="form-control"
-                    value="{{ old('cabang', $surat_keluar->cabang ?? '') }}" required>
+                <label class="form-label font-weight-bold">
+                    Cabang <span class="text-danger">*</span>
+                </label>
+
+                <select name="cabang" class="form-select" required>
+                    <option value="">Pilih Cabang</option>
+
+                    @php
+                        $cabangList = [
+                            'Pekanbaru',
+                            'Dumai',
+                            'Bengkalis',
+                            'Bangkinang (Kabupaten Kampar)',
+                            'Pangkalan Kerinci (Kabupaten Pelalawan)',
+                            'Teluk Kuantan (Kabupaten Kuantan Singingi)',
+                            'Pasir Pengaraian (Kabupaten Rokan Hulu)',
+                            'Tembilahan (Kabupaten Indragiri Hilir)',
+                            'Siak Sri Indrapura (Kabupaten Siak)',
+                            'Selat Panjang (Kabupaten Kepulauan Meranti)',
+                            'Tanjung Pinang',
+                            'Tanjung Balai Karimun',
+                            'Bintan',
+                            'Ranai (Kabupaten Natuna)',
+                            'Daik Lingga (Kabupaten Lingga)',
+                            'Tarempa (Kabupaten Kepulauan Anambas)',
+                        ];
+                    @endphp
+
+                    @foreach ($cabangList as $cabang)
+                        <option value="{{ $cabang }}"
+                            {{ old('cabang', $surat_keluar->cabang ?? '') == $cabang ? 'selected' : '' }}>
+                            {{ $cabang }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
             <div class="col-md-4">
                 <label class="form-label font-weight-bold">Nama Nasabah <span class="text-danger">*</span></label>
@@ -91,9 +123,16 @@
                                     value="{{ $item['nominal'] ?? '' }}" required>
                             </td>
                             <td>
-                                <input type="text" name="items[{{ $index }}][jangka_waktu]"
-                                    class="form-control form-control-sm" placeholder="Contoh: 3 Bulan"
-                                    value="{{ $item['jangka_waktu'] ?? '' }}" required>
+                                <select name="items[{{ $index }}][jangka_waktu]"
+                                    class="form-select form-select-sm" required>
+                                    <option value="">Pilih</option>
+                                    @for ($i = 1; $i <= 6; $i++)
+                                        <option value="{{ $i }} Bulan"
+                                            {{ ($item['jangka_waktu'] ?? '') == $i . ' Bulan' ? 'selected' : '' }}>
+                                            {{ $i }} Bulan
+                                        </option>
+                                    @endfor
+                                </select>
                             </td>
                             <td>
                                 <input type="date" name="items[{{ $index }}][tanggal_penempatan_baru]"
