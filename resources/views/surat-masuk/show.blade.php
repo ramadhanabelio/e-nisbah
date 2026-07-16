@@ -547,7 +547,7 @@
                                 <thead>
                                     <tr>
                                         <th style="width: 33.33%;">Direktur Dana & Jasa</th>
-                                        <th style="width: 33.33%;">Direktur Pembiayaan/Operasional</th>
+                                        {{-- <th style="width: 33.33%;">Direktur Pembiayaan/Operasional</th> --}}
                                         <th style="width: 33.33%;">Direktur Utama</th>
                                     </tr>
                                 </thead>
@@ -564,7 +564,7 @@
                                                 @endif
                                             </div>
                                         </td>
-                                        <td>
+                                        {{-- <td>
                                             <div class="signature-box">
                                                 @if ($approvalDirOps)
                                                     <img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=VerifiedByDirOps-{{ $dirOpsName }}-Surat-{{ $surat->id }}"
@@ -574,7 +574,7 @@
                                                     <span class="signer-name">{{ $dirOpsName }}</span>
                                                 @endif
                                             </div>
-                                        </td>
+                                        </td> --}}
                                         <td>
                                             <div class="signature-box">
                                                 @if ($approvalDirut)
@@ -589,7 +589,7 @@
                                     </tr>
                                     <tr>
                                         <td class="date-row">Tanggal : {{ $dirDanaDate }}</td>
-                                        <td class="date-row">Tanggal : {{ $dirOpsDate }}</td>
+                                        {{-- <td class="date-row">Tanggal : {{ $dirOpsDate }}</td> --}}
                                         <td class="date-row">Tanggal : {{ $dirutDate }}</td>
                                     </tr>
                                 </tbody>
