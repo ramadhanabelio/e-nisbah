@@ -5,16 +5,19 @@
     <div class="card-body p-4">
         <div class="row g-3">
             <div class="col-md-4">
-                <label class="form-label font-weight-bold">Nomor Surat <span class="text-danger">*</span></label>
-                <input type="text" name="nomor_surat" class="form-control"
-                    value="{{ old('nomor_surat', $surat_keluar->nomor_surat ?? '') }}" required>
+                <label class="form-label font-weight-bold">
+                    Nomor Surat <span class="text-danger">*</span>
+                </label>
+
+                <input type="text" id="nomor_surat" name="nomor_surat" class="form-control"
+                    value="{{ old('nomor_surat', $surat_keluar->nomor_surat ?? '') }}" readonly required>
             </div>
             <div class="col-md-4">
                 <label class="form-label font-weight-bold">
                     Cabang <span class="text-danger">*</span>
                 </label>
 
-                <select name="cabang" class="form-select" required>
+                <select id="cabang" name="cabang" class="form-select" required>
                     <option value="">Pilih Cabang</option>
 
                     @php
@@ -76,6 +79,22 @@
             <div class="col-12">
                 <label class="form-label font-weight-bold">Alasan Pengajuan <span class="text-danger">*</span></label>
                 <textarea name="alasan" class="form-control" rows="3" required>{{ old('alasan', $surat_keluar->alasan ?? '') }}</textarea>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label font-weight-bold">
+                    Lampiran (JPG, JPEG, PNG)
+                </label>
+
+                <input type="file" name="lampiran" class="form-control" accept=".jpg,.jpeg,.png,image/*">
+
+                @if (isset($surat_keluar) && $surat_keluar->lampiran)
+                    <div class="mt-2">
+                        <a href="{{ asset('storage/' . $surat_keluar->lampiran) }}" target="_blank">
+                            <img src="{{ asset('storage/' . $surat_keluar->lampiran) }}" class="img-thumbnail"
+                                style="max-height:180px;">
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -226,6 +245,24 @@
 
         document.getElementById('total_nominal').value = total;
     }
+
+    function generateNomorSurat() {
+
+        const cabang = document.getElementById('cabang').value;
+
+        if (!cabang) {
+            document.getElementById('nomor_surat').value = '';
+            return;
+        }
+
+        let kodeCabang = cabang.split('(')[0].trim().toUpperCase();
+
+        document.getElementById('nomor_surat').value =
+            `AUTO/${kodeCabang}/${new Date().getFullYear()}`;
+    }
+
+    document.getElementById('cabang').addEventListener('change', generateNomorSurat);
+    document.addEventListener('DOMContentLoaded', generateNomorSurat);
 
     document.addEventListener('DOMContentLoaded', function() {
         calculateTotalNominal();

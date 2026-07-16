@@ -20,6 +20,7 @@ class Surat extends Model
         'total_nominal',
         'total_relation_outstanding',
         'alasan',
+        'lampiran',
 
         'created_by',
         'status',

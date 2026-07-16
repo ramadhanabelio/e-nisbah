@@ -9,6 +9,7 @@ use App\Models\WorkflowSurat;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
@@ -37,13 +38,19 @@ class SuratKeluarController extends Controller implements HasMiddleware
 
     public function create()
     {
-        return view('surat-keluar.create');
+        $nomorUrut = str_pad(
+            Surat::count() + 1,
+            3,
+            '0',
+            STR_PAD_LEFT
+        );
+
+        return view('surat-keluar.create', compact('nomorUrut'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nomor_surat'                 => 'required|unique:surats,nomor_surat',
             'tanggal'                     => 'required|date',
             'cabang'                      => 'required|string|max:255',
             'nama_nasabah'                => 'required|string|max:255',
@@ -51,7 +58,7 @@ class SuratKeluarController extends Controller implements HasMiddleware
             'total_nominal'               => 'required|numeric|min:0',
             'total_relation_outstanding'  => 'required|numeric|min:0',
             'alasan'                      => 'required|string',
-            'keterangan'                  => 'nullable|string',
+            'lampiran'                    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
 
             'items'                               => 'required|array|min:1',
             'items.*.nomor_rekening_deposito'     => 'required|string',
@@ -66,10 +73,30 @@ class SuratKeluarController extends Controller implements HasMiddleware
         ]);
 
         try {
+            $tahun = now()->year;
+
+            $nomorUrut = str_pad(
+                Surat::lockForUpdate()->count() + 1,
+                3,
+                '0',
+                STR_PAD_LEFT
+            );
+
+            $kodeCabang = strtoupper(trim($request->cabang));
+
+            $nomorSurat = "{$nomorUrut}/{$kodeCabang}/{$tahun}";
+
             DB::beginTransaction();
 
+            $lampiran = null;
+
+            if ($request->hasFile('lampiran')) {
+                $lampiran = $request->file('lampiran')
+                    ->store('lampiran-surat', 'public');
+            }
+
             $surat_keluar = Surat::create([
-                'nomor_surat'                => $request->nomor_surat,
+                'nomor_surat'                => $nomorSurat,
                 'tanggal'                    => $request->tanggal,
                 'cabang'                     => $request->cabang,
                 'nama_nasabah'               => $request->nama_nasabah,
@@ -77,7 +104,7 @@ class SuratKeluarController extends Controller implements HasMiddleware
                 'total_nominal'              => $request->total_nominal,
                 'total_relation_outstanding' => $request->total_relation_outstanding,
                 'alasan'                     => $request->alasan,
-                'keterangan'                 => $request->keterangan,
+                'lampiran'                   => $lampiran,
                 'created_by'                 => Auth::id(),
                 'status'                     => 'proses',
             ]);
@@ -141,7 +168,7 @@ class SuratKeluarController extends Controller implements HasMiddleware
             'total_nominal'               => 'required|numeric|min:0',
             'total_relation_outstanding'  => 'required|numeric|min:0',
             'alasan'                      => 'required|string',
-            'keterangan'                  => 'nullable|string',
+            'lampiran'                    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
 
             'items'                               => 'required|array|min:1',
             'items.*.nomor_rekening_deposito'     => 'required|string',
@@ -158,6 +185,18 @@ class SuratKeluarController extends Controller implements HasMiddleware
         try {
             DB::beginTransaction();
 
+            $lampiran = $surat_keluar->lampiran;
+
+            if ($request->hasFile('lampiran')) {
+
+                if ($lampiran && Storage::disk('public')->exists($lampiran)) {
+                    Storage::disk('public')->delete($lampiran);
+                }
+
+                $lampiran = $request->file('lampiran')
+                    ->store('lampiran-surat', 'public');
+            }
+
             $dataToUpdate = [
                 'nomor_surat'                => $request->nomor_surat,
                 'tanggal'                    => $request->tanggal,
@@ -167,7 +206,7 @@ class SuratKeluarController extends Controller implements HasMiddleware
                 'total_nominal'              => $request->total_nominal,
                 'total_relation_outstanding' => $request->total_relation_outstanding,
                 'alasan'                     => $request->alasan,
-                'keterangan'                 => $request->keterangan,
+                'lampiran'                   => $lampiran,
             ];
 
             if ($surat_keluar->status === 'revisi') {

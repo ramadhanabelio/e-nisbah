@@ -123,6 +123,16 @@
             text-align: left !important;
             padding-left: 8px !important;
         }
+
+        .lampiran-page {
+            text-align: center;
+        }
+
+        .lampiran-page img {
+            width: 100%;
+            height: auto;
+            max-height: 1000px;
+        }
     </style>
 </head>
 
@@ -438,6 +448,28 @@
         2. Untuk pengajuan spesial nisbah dengan tambahan bagi hasil mengisi spesial nisbah dan Expected Return (ER)
         pada formulir permohonan spesial nisbah.
     </div>
+
+    @if ($surat->lampiran)
+
+        <div style="page-break-before: always;"></div>
+
+        @php
+            $imagePath = public_path('storage/' . $surat->lampiran);
+        @endphp
+
+        @if (file_exists($imagePath))
+            @php
+                $type = pathinfo($imagePath, PATHINFO_EXTENSION);
+                $data = file_get_contents($imagePath);
+                $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+            @endphp
+
+            <img src="{{ $base64 }}" style="width:100%;">
+        @else
+            Lampiran tidak ditemukan
+        @endif
+
+    @endif
 </body>
 
 </html>

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->decimal('total_nominal', 20, 2);
             $table->decimal('total_relation_outstanding', 20, 2);
             $table->text('alasan');
+            $table->text('lampiran')->nullable();
 
             $table->foreignId('created_by')->constrained('users');
             $table->enum('status', ['draft', 'proses', 'revisi', 'selesai'])->default('draft');

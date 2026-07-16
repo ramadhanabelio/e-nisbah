@@ -35,7 +35,7 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('surat-keluar.store') }}" method="POST">
+                        <form action="{{ route('surat-keluar.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
 
                             @include('surat-keluar.form')
