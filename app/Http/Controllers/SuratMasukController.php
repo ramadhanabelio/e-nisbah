@@ -62,7 +62,19 @@ class SuratMasukController extends Controller implements HasMiddleware
             return redirect()->route('surat-masuk.index')->with('error', 'Dokumen tidak tersedia atau sudah diproses.');
         }
 
-        return view('surat-masuk.show', compact('surat'));
+        $approvedRoles = ApprovalSurat::where('surat_id', $surat->id)
+            ->where('status', 'approved')
+            ->pluck('role')
+            ->toArray();
+
+        $isFinalNominal = (
+            ($surat->nominal < 10000000000 && in_array('pinbag', $approvedRoles)) ||
+            ($surat->nominal < 50000000000 && in_array('pinidiv', $approvedRoles)) ||
+            ($surat->nominal < 250000000000 && in_array('direksi', $approvedRoles)) ||
+            in_array('dirut', $approvedRoles)
+        );
+
+        return view('surat-masuk.show', compact('surat', 'isFinalNominal'));
     }
 
     public function approve(Request $request, Surat $surat)
@@ -205,13 +217,30 @@ class SuratMasukController extends Controller implements HasMiddleware
 
             $nextRole = $this->getNextRole($user->role, $surat->nominal);
 
-            $workflow->update([
-                'current_role' => $nextRole,
-                'current_user_id' => 6
-            ]);
+            if ($request->has('action') && $request->action === 'selesai') {
+                $surat->update(['status' => 'selesai']);
+                $workflow->update([
+                    'current_role' => 'selesai',
+                    'current_user_id' => null
+                ]);
+
+                ApprovalSurat::create([
+                    'surat_id'    => $surat->id,
+                    'user_id'     => $user->id,
+                    'role'        => $user->role,
+                    'status'      => 'approved',
+                    'approved_at' => now(),
+                    'catatan'     => 'Dokumen diselesaikan dan diarsipkan oleh ' . $user->name,
+                ]);
+            } else {
+                $workflow->update([
+                    'current_role' => $nextRole,
+                    'current_user_id' => null
+                ]);
+            }
 
             DB::commit();
-            return redirect()->route('surat-masuk.index')->with('success', 'Surat berhasil diteruskan.');
+            return redirect()->route('surat-masuk.index')->with('success', 'Surat berhasil diproses.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal memproses: ' . $e->getMessage());

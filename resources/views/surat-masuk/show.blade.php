@@ -102,13 +102,24 @@
 
                     <div class="d-grid gap-2">
                         @if (Auth::user()->role === 'admin_pusat')
-                            <form action="{{ route('surat-masuk.approveAdmin', $surat->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-success w-100 fw-bold shadow-sm"
-                                    onclick="return confirm('Apakah Anda yakin ingin meneruskan dokumen kelolaan ini?')">
-                                    <i class="fas fa-arrow-right me-2"></i> Teruskan Dokumen
-                                </button>
-                            </form>
+                            @if ($isFinalNominal)
+                                <form action="{{ route('surat-masuk.direct', $surat->id) }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="action" value="selesai">
+                                    <button type="submit" class="btn btn-primary w-100 fw-bold shadow-sm"
+                                        onclick="return confirm('Apakah anda yakin ingin menyelesaikan dan menutup proses dokumen ini?')">
+                                        <i class="fas fa-check-double me-2"></i> Selesaikan & Arsipkan Dokumen
+                                    </button>
+                                </form>
+                            @else
+                                <form action="{{ route('surat-masuk.direct', $surat->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success w-100 fw-bold shadow-sm"
+                                        onclick="return confirm('Apakah Anda yakin ingin meneruskan dokumen kelolaan ini?')">
+                                        <i class="fas fa-arrow-right me-2"></i> Teruskan Dokumen
+                                    </button>
+                                </form>
+                            @endif
                         @else
                             <form action="{{ route('surat-masuk.approve', $surat->id) }}" method="POST">
                                 @csrf
