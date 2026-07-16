@@ -58,8 +58,8 @@
             </div>
             <div class="col-md-4">
                 <label class="form-label font-weight-bold">Total Nominal (Rp) <span class="text-danger">*</span></label>
-                <input type="number" name="total_nominal" class="form-control"
-                    value="{{ old('total_nominal', $surat_keluar->total_nominal ?? '') }}" required>
+                <input type="number" id="total_nominal" name="total_nominal" class="form-control"
+                    value="{{ old('total_nominal', $surat_keluar->total_nominal ?? 0) }}" readonly required>
             </div>
             <div class="col-md-4">
                 <label class="form-label font-weight-bold">Total Relation Outstanding <span
@@ -119,8 +119,8 @@
                             </td>
                             <td>
                                 <input type="number" name="items[{{ $index }}][nominal]"
-                                    class="form-control form-control-sm" min="0"
-                                    value="{{ $item['nominal'] ?? '' }}" required>
+                                    class="form-control form-control-sm nominal-input" min="0"
+                                    value="{{ $item['nominal'] ?? '' }}" oninput="calculateTotalNominal()" required>
                             </td>
                             <td>
                                 <select name="items[{{ $index }}][jangka_waktu]"
@@ -187,8 +187,18 @@
     function addRow() {
         let html = `<tr>
             <td><input type="text" name="items[${i}][nomor_rekening_deposito]" class="form-control form-control-sm" required></td>
-            <td><input type="number" name="items[${i}][nominal]" class="form-control form-control-sm" min="0" required></td>
-            <td><input type="text" name="items[${i}][jangka_waktu]" class="form-control form-control-sm" required></td>
+            <td><input type="number" name="items[${i}][nominal]" class="form-control form-control-sm nominal-input" min="0" oninput="calculateTotalNominal()" required></td>
+            <td>
+                <select name="items[${i}][jangka_waktu]" class="form-select form-select-sm" required>
+                    <option value="">Pilih</option>
+                    <option value="1 Bulan">1 Bulan</option>
+                    <option value="2 Bulan">2 Bulan</option>
+                    <option value="3 Bulan">3 Bulan</option>
+                    <option value="4 Bulan">4 Bulan</option>
+                    <option value="5 Bulan">5 Bulan</option>
+                    <option value="6 Bulan">6 Bulan</option>
+                </select>
+            </td>
             <td><input type="date" name="items[${i}][tanggal_penempatan_baru]" class="form-control form-control-sm" required></td>
             <td><input type="date" name="items[${i}][tanggal_perpanjangan]" class="form-control form-control-sm"></td>
             <td><input type="date" name="items[${i}][tanggal_jatuh_tempo]" class="form-control form-control-sm" required></td>
@@ -199,9 +209,25 @@
         </tr>`;
         document.querySelector('#itemsTable tbody').insertAdjacentHTML('beforeend', html);
         i++;
+        calculateTotalNominal();
     }
 
     function removeRow(btn) {
         btn.closest('tr').remove();
+        calculateTotalNominal();
     }
+
+    function calculateTotalNominal() {
+        let total = 0;
+
+        document.querySelectorAll('.nominal-input').forEach(function(input) {
+            total += parseFloat(input.value) || 0;
+        });
+
+        document.getElementById('total_nominal').value = total;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        calculateTotalNominal();
+    });
 </script>
