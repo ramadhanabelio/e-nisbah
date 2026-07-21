@@ -115,7 +115,7 @@
                         <th style="width: 14%">No Rekening <span class="text-danger">*</span></th>
                         <th style="width: 12%">Nominal <span class="text-danger">*</span></th>
                         <th style="width: 10%">Jk. Waktu <span class="text-danger">*</span></th>
-                        <th style="width: 11%">Tgl Penempatan <span class="text-danger">*</span></th>
+                        <th style="width: 11%">Tgl Penempatan</th>
                         <th style="width: 11%">Tgl Perpanjangan</th>
                         <th style="width: 11%">Tgl Jatuh Tempo <span class="text-danger">*</span></th>
                         <th style="width: 10%">Spesial Nisbah <span class="text-danger">*</span></th>
@@ -143,7 +143,7 @@
                             </td>
                             <td>
                                 <select name="items[{{ $index }}][jangka_waktu]"
-                                    class="form-select form-select-sm" required>
+                                    class="form-select form-select-sm jangka-waktu" required>
                                     <option value="">Pilih</option>
                                     @for ($i = 1; $i <= 6; $i++)
                                         <option value="{{ $i }} Bulan"
@@ -155,18 +155,18 @@
                             </td>
                             <td>
                                 <input type="date" name="items[{{ $index }}][tanggal_penempatan_baru]"
-                                    class="form-control form-control-sm"
-                                    value="{{ $item['tanggal_penempatan_baru'] ?? '' }}" required>
+                                    class="form-control form-control-sm tanggal-penempatan"
+                                    value="{{ $item['tanggal_penempatan_baru'] ?? '' }}">
                             </td>
                             <td>
                                 <input type="date" name="items[{{ $index }}][tanggal_perpanjangan]"
-                                    class="form-control form-control-sm"
+                                    class="form-control form-control-sm tanggal-perpanjangan"
                                     value="{{ $item['tanggal_perpanjangan'] ?? '' }}">
                             </td>
                             <td>
                                 <input type="date" name="items[{{ $index }}][tanggal_jatuh_tempo]"
-                                    class="form-control form-control-sm"
-                                    value="{{ $item['tanggal_jatuh_tempo'] ?? '' }}" required>
+                                    class="form-control form-control-sm tanggal-jatuh-tempo"
+                                    value="{{ $item['tanggal_jatuh_tempo'] ?? '' }}" readonly required>
                             </td>
                             <td>
                                 <input type="text" name="items[{{ $index }}][spesial_nisbah]"
@@ -179,9 +179,18 @@
                                     required>
                             </td>
                             <td>
-                                <input type="text" name="items[{{ $index }}][jenis_transaksi]"
-                                    class="form-control form-control-sm" placeholder="Baru / Perpanjangan"
-                                    value="{{ $item['jenis_transaksi'] ?? '' }}" required>
+                                <select name="items[{{ $index }}][jenis_transaksi]"
+                                    class="form-select form-select-sm" required>
+                                    <option value="">Pilih</option>
+                                    <option value="Baru"
+                                        {{ ($item['jenis_transaksi'] ?? '') == 'Baru' ? 'selected' : '' }}>
+                                        Baru
+                                    </option>
+                                    <option value="Perpanjangan"
+                                        {{ ($item['jenis_transaksi'] ?? '') == 'Perpanjangan' ? 'selected' : '' }}>
+                                        Perpanjangan
+                                    </option>
+                                </select>
                             </td>
                             <td class="text-center">
                                 @if ($loop->first)
@@ -208,7 +217,7 @@
             <td><input type="text" name="items[${i}][nomor_rekening_deposito]" class="form-control form-control-sm" required></td>
             <td><input type="number" name="items[${i}][nominal]" class="form-control form-control-sm nominal-input" min="0" oninput="calculateTotalNominal()" required></td>
             <td>
-                <select name="items[${i}][jangka_waktu]" class="form-select form-select-sm" required>
+                <select name="items[${i}][jangka_waktu]" class="form-select form-select-sm jangka-waktu" required>
                     <option value="">Pilih</option>
                     <option value="1 Bulan">1 Bulan</option>
                     <option value="2 Bulan">2 Bulan</option>
@@ -218,12 +227,20 @@
                     <option value="6 Bulan">6 Bulan</option>
                 </select>
             </td>
-            <td><input type="date" name="items[${i}][tanggal_penempatan_baru]" class="form-control form-control-sm" required></td>
-            <td><input type="date" name="items[${i}][tanggal_perpanjangan]" class="form-control form-control-sm"></td>
-            <td><input type="date" name="items[${i}][tanggal_jatuh_tempo]" class="form-control form-control-sm" required></td>
+            <td><input type="date" name="items[${i}][tanggal_penempatan_baru]" class="form-control form-control-sm tanggal-penempatan"></td>
+            <td><input type="date" name="items[${i}][tanggal_perpanjangan]" class="form-control form-control-sm tanggal-perpanjangan"></td>
+            <td> 
+                <input type="date" name="items[${i}][tanggal_jatuh_tempo]" class="form-control form-control-sm tanggal-jatuh-tempo" readonly required>
+            </td>
             <td><input type="text" name="items[${i}][spesial_nisbah]" class="form-control form-control-sm" required></td>
             <td><input type="text" name="items[${i}][expected_return]" class="form-control form-control-sm" required></td>
-            <td><input type="text" name="items[${i}][jenis_transaksi]" class="form-control form-control-sm" required></td>
+            <td>
+                <select name="items[${i}][jenis_transaksi]" class="form-select form-select-sm" required>
+                    <option value="">Pilih</option>
+                    <option value="Baru">Baru</option>
+                    <option value="Perpanjangan">Perpanjangan</option>
+                </select>
+            </td>
             <td class="text-center"><button type="button" class="btn btn-link text-danger p-0" onclick="removeRow(this)"><i class="fas fa-trash"></i></button></td>
         </tr>`;
         document.querySelector('#itemsTable tbody').insertAdjacentHTML('beforeend', html);
@@ -260,6 +277,57 @@
         document.getElementById('nomor_surat').value =
             `AUTO/${kodeCabang}/${new Date().getFullYear()}`;
     }
+
+    function hitungJatuhTempo(row) {
+
+        const jangka = row.querySelector('.jangka-waktu').value;
+
+        const penempatan = row.querySelector('.tanggal-penempatan').value;
+        const perpanjangan = row.querySelector('.tanggal-perpanjangan').value;
+
+        const jatuhTempo = row.querySelector('.tanggal-jatuh-tempo');
+
+        let tanggalAwal = perpanjangan || penempatan;
+
+        if (!tanggalAwal || !jangka) {
+            jatuhTempo.value = '';
+            return;
+        }
+
+        let bulan = parseInt(jangka);
+
+        let tanggal = new Date(tanggalAwal);
+
+        const hari = tanggal.getDate();
+
+        tanggal.setMonth(tanggal.getMonth() + bulan);
+
+        if (tanggal.getDate() !== hari) {
+            tanggal.setDate(0);
+        }
+
+        jatuhTempo.value = tanggal.toISOString().split('T')[0];
+    }
+
+    document.addEventListener('change', function(e) {
+
+        if (
+            e.target.classList.contains('jangka-waktu') ||
+            e.target.classList.contains('tanggal-penempatan') ||
+            e.target.classList.contains('tanggal-perpanjangan')
+        ) {
+            hitungJatuhTempo(e.target.closest('tr'));
+        }
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        document.querySelectorAll('#itemsTable tbody tr').forEach(function(row) {
+            hitungJatuhTempo(row);
+        });
+
+    });
 
     document.getElementById('cabang').addEventListener('change', generateNomorSurat);
     document.addEventListener('DOMContentLoaded', generateNomorSurat);

@@ -51,9 +51,19 @@
 
                 @if (auth()->user()->role !== 'cs')
                     <li class="nav-item {{ request()->is('surat-masuk*') ? 'active' : '' }}">
-                        <a href="{{ route('surat-masuk.index') }}">
-                            <i class="fas fa-file-import"></i>
-                            <p>Surat Masuk</p>
+                        <a href="{{ route('surat-masuk.index') }}"
+                            class="d-flex justify-content-between align-items-center">
+
+                            <div>
+                                <i class="fas fa-file-import"></i>
+                                <p class="d-inline ms-2">Surat Masuk</p>
+                            </div>
+
+                            @if ($suratMasukCount > 0)
+                                <span class="badge badge-danger">
+                                    {{ $suratMasukCount }}
+                                </span>
+                            @endif
                         </a>
                     </li>
                 @endif
