@@ -18,7 +18,7 @@
                         <div class="row align-items-center">
                             <div class="col-4">
                                 <div class="icon-big text-center">
-                                    <i class="fas fa-mail-bulk fa-2x"></i>
+                                    <i class="fas fa-envelope fa-2x"></i>
                                 </div>
                             </div>
                             <div class="col-8 col-stats px-0">
