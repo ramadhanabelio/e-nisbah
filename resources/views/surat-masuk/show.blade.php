@@ -445,7 +445,7 @@
                                     <td style="width: 15px; vertical-align: top; padding: 1px 0;">:</td>
                                     <td style="font-weight: bold; vertical-align: top; padding: 1px 0;">
                                         {{ number_format($surat->total_relation_outstanding, 0, ',', '.') }},- (
-                                        {{ ucwords($surat->total_relation_outstanding_terbilang ?? 'Enam Puluh Tujuh Milyar') }}
+                                        {{ ucwords($surat->total_relation_outstanding_terbilang) }}
                                         )
                                     </td>
                                 </tr>
