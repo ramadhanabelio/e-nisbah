@@ -130,12 +130,12 @@
                             </form>
                         @endif
 
-                        @if (Auth::user()->role !== 'admin_pusat')
-                            <button type="button" class="btn btn-danger w-100 fw-bold shadow-sm" data-bs-toggle="modal"
-                                data-bs-target="#rejectModal">
-                                <i class="fas fa-times-circle me-2"></i> Tolak / Kembalikan ke CS
-                            </button>
-                        @endif
+                        {{-- @if (Auth::user()->role !== 'admin_pusat') --}}
+                        <button type="button" class="btn btn-danger w-100 fw-bold shadow-sm" data-bs-toggle="modal"
+                            data-bs-target="#rejectModal">
+                            <i class="fas fa-times-circle me-2"></i> Tolak / Kembalikan ke CS
+                        </button>
+                        {{-- @endif --}}
                     </div>
                 </div>
             </div>
