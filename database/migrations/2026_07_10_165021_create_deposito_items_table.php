@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('nomor_rekening_deposito');
             $table->decimal('nominal', 20, 2);
             $table->string('jangka_waktu');
-            $table->date('tanggal_penempatan_baru');
+            $table->date('tanggal_penempatan_baru')->nullable();
             $table->date('tanggal_perpanjangan')->nullable();
             $table->date('tanggal_jatuh_tempo');
             $table->string('spesial_nisbah');

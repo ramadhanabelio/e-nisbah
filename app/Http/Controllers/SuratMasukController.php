@@ -97,21 +97,17 @@ class SuratMasukController extends Controller implements HasMiddleware
                 'approved_at' => now(),
             ]);
 
-            $nextRole = $this->getNextRole($user->role, $surat->nominal);
+            $nextRole = $this->getNextRole($user->role, $surat->total_nominal);
 
-            $workflow->update([
-                'current_role' => $nextRole,
-                'current_user_id' => null
-            ]);
-
-            $nextRole = $this->getNextRole($user->role, $surat->nominal);
-
-            if ($nextRole === 'selesai' || ($user->role === 'admin_pusat_final')) {
+            if ($nextRole === 'selesai' || $user->role === 'admin_pusat_final') {
                 $surat->update(['status' => 'selesai']);
-                $workflow->update(['current_role' => 'selesai']);
+                $workflow->update([
+                    'current_role'    => 'selesai',
+                    'current_user_id' => null
+                ]);
             } else {
                 $workflow->update([
-                    'current_role' => $nextRole,
+                    'current_role'    => $nextRole,
                     'current_user_id' => null
                 ]);
             }
